@@ -11,16 +11,12 @@ from PyQt5.QtGui import QIcon
 from DicomAnnotator.utils.namerules import *
 from DicomAnnotator.app.instructions import *
 
-#---------------추가----------------
 from DicomAnnotator.main import get_ImgIDList
 from PyQt5 import *
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QPainter, QPen
 from PyQt5.QtCore import Qt
-
-#---------------추가----------------
-
 
 
 
@@ -127,8 +123,6 @@ class AppWidgets(QMainWindow):
         # the start button
         self.start_button = QPushButton('START')
 
-
-    #--------- 추가---------------------------------------------
     def showDialog(self):
         rst = get_ImgIDList('images/')
         num = 0
@@ -140,26 +134,18 @@ class AppWidgets(QMainWindow):
         self.path = '/'.join(y) + '/'
 
         com = x[-1]
-
-        print(self.path)
-
-        print(com)
         
         for i in rst:
             if i == com:
-                #print(i)
-                #print(num)
                 break
             num += 1
 
         return num
-    #------------- 추가---------------------------------------------
 
     def showDialog_file_path(self):
         return self.path
 
 
-    #------------------annotation_button추가---------------------------
     def annotation_button_on_click(self):
         self.annotation_button_status = (self.annotation_button_status + 1) %2
         
@@ -185,21 +171,12 @@ class AppWidgets(QMainWindow):
               
         return self.annotation_button_status # 1 is annotation_on, 0 is annotation_off
 
-    #------------------annotation_button추가---------------------------
     def link_annotation_status(self):
         if self.annotation_button_status == 1:
             return self.annotation_button_status
 
         elif self.annotation_button_status == 0:
             return self.annotation_button_status
-    #------------------annotation_button추가---------------------------
-
-
-
-
-
-
-    
 
 
     def mainPageWidgets(self):
@@ -207,26 +184,14 @@ class AppWidgets(QMainWindow):
         widgets in main page
         '''
 
-        #----menubar 추가-------------------
         exitAction = QAction('Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.triggered.connect(qApp.quit)
         
-        #openFile = QAction(QIcon('open.dcm'), 'Open', self)
-        #openFile.setShortcut('Ctrl+O')
-        #openFile.setStatusTip('Open New File')
-        #openFile.triggered.connect(self.showDialog)
-
         menubar = self.menuBar()
         menubar.setNativeMenuBar(False)
         filemenu = menubar.addMenu('&File')
-        #filemenu.addAction(openFile)
         filemenu.addAction(exitAction)
-        #---------------------------------
-
-
-
-
 
         # widgets in the controversial box
         self.unreadable_button = QPushButton(
@@ -305,17 +270,9 @@ class AppWidgets(QMainWindow):
         self.inverse_gray_button = QPushButton(
             'Invert the Gray',default=False, autoDefault=False)
 
-
-
-
-        #------------------annotation_button추가---------------------------
         self.annotation_button_status = 0
         self.annotation_button = QPushButton(
             'Annotation Off', default=False, autoDefault=False)
-        #------------------annotation_button추가---------------------------
-
-
-
 
 
         if self.configs['region_labels']['radiobuttons'] is None:
@@ -511,17 +468,7 @@ class AppWidgets(QMainWindow):
         set font size of each widgets in the app
         """
 
-
-
-
-        #------------------annotation_button추가---------------------------
         self.annotation_button.setFont(self.font_12)
-        #------------------annotation_button추가---------------------------
-
-
-
-
-
         self.unreadable_button.setFont(self.font_12)
         self.prev_button.setFont(self.font_12)
         self.next_button.setFont(self.font_12)

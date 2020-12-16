@@ -3,13 +3,11 @@ import os
 
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
-#-------------추가------------------
 from PyQt5 import *
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QPainter, QPen
 from PyQt5.QtCore import Qt
-#-------------추가------------------
 
 from DicomAnnotator.utils.namerules import *
 from DicomAnnotator.app.instructions import *
@@ -123,15 +121,7 @@ class AppLayouts(AppWidgets):
         self.labelling_layout.addWidget(self.points_off_on_button)
         self.labelling_layout.addWidget(self.inverse_gray_button)
         self.labelling_layout.addLayout(self.frac_label_gather_box)
-        
-
-        #------------------annotation_button추가---------------------------
         self.labelling_layout.addWidget(self.annotation_button)
-
-
-        #------------------annotation_button추가---------------------------
-
-
         self.labelling_layout.setStretch(0,1)
         self.labelling_layout.setStretch(1,50)
         self.labelling_layout.setStretch(2,1)

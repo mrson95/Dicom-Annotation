@@ -13,26 +13,19 @@ import os
 
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
-#-------추가-------------------------
 from PyQt5 import *
 import sys
 from PyQt5.QtWidgets import QWidget, QApplication
 from PyQt5.QtGui import QPainter, QPen
 from PyQt5.QtCore import Qt
-#import cv2
-#-------추가------------------------
 from DicomAnnotator.utils.namerules import *
 from DicomAnnotator.utils.image_normalization import *
 from DicomAnnotator.app.instructions import *
 from DicomAnnotator.app.layouts import AppLayouts
 from DicomAnnotator.app.storage_dicts import InfoStorageDicts
-
-#-------------------추가-------------------------
 from DicomAnnotator.app.widgets import AppWidgets
 import pydicom
 from pydicom.data import get_testdata_file
-#-------------------추가-------------------------
-
 import numpy as np
 from matplotlib.pyplot import grid
 
@@ -103,11 +96,9 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
         InfoStorageDicts.__init__(self, ImgIDList, csv_path, configs, nameRules)
         QDialog.__init__(self, parent)
 
-        #-------------좌표 리스트 추가----------------
         self.x_list = []
         self.y_list = []
         
-        #-------------좌표 리스트 추가----------------
         self.ImageDir = ImageDir
         self.zoom_base_scale = configs['zooming_speed']
         self.wl_scale = configs['window_level_sensitivity'] / 10
@@ -166,15 +157,7 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
         self.mode_radiobuttons2.toggled.connect(
             lambda:self.mode_radiobuttons_on_change(self.mode_radiobuttons2))
         self.points_off_on_button.clicked.connect(self.points_off_on_button_on_click)
-        
-        
-        
-        #------------------annotation_button추가---------------------------
         self.annotation_button.clicked.connect(self.annotation_button_on_click)
-        #------------------annotation_button추가---------------------------
-        
-        
-        
         
         self.inverse_gray_button.clicked.connect(self.inverse_gray_button_on_click)
         for radiobutton in self.ost_radiobuttons:
@@ -270,33 +253,12 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
         self.init_display_flag = False
 
 
-        #-------------------추가-------------------
-        #파일 경로 및 이름
         self.file_path = AppWidgets.showDialog_file_path(self)
         self.file_name = self.ImgIDList[self.ImgPointer]
-
-        #dcmread로 파일 불러올 때 경로
         self.tot_path = self.file_path + self.file_name
-
-        #dcm 파일 읽어오기
         self.ds = pydicom.read_file(self.tot_path)
-
-        #dcm 파일 pixel 값
         self.ds_pixarr = self.ds.pixel_array
-        #self.temp = self.ds_pixarr
 
-        #-------------------추가-------------------
-
-
-
-
-
-
-
-
-
-
-    
     def _is_complete_label_unlabel(self, vb):
         """
         if a vb is completely labelled or unlabelled
@@ -737,19 +699,14 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
 
         # The first image that will be shown
         # self.ImgPointer is always pointing to the image that is shown currently
-        
-        
-        #----------------추가---------------------------------
+          
         self.ImgPointer = AppWidgets.showDialog(self)
-
         temp_for = []
         temp_back = []
         temp_for = self.ImgIDList[:self.ImgPointer]
         temp_back = self.ImgIDList[self.ImgPointer:]
 
         self.ImgIDList = temp_back + temp_for
-        #----------------추가---------------------------------
-
 
 
         for i, ID in enumerate(self.ImgIDList):
@@ -1397,20 +1354,13 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
                         self.save_status = self.nr.unsaved
                         self.update_save_status_label()
 
-
-                    #------------------추가-----------------------
                     elif AppWidgets.link_annotation_status(self) == 1:
-                        print('--------클릭한 좌표 test--------------')
                         self.co_x = 0
                         self.co_y = 0
 
-                        #x,y좌표
                         self.co_x = int(event.xdata)
                         self.co_y = int(event.ydata)
-                        print('클릭한 x좌표: ', self.co_x)
-                        print('클릭한 y좌표: ', self.co_y)
                         
-                        #이미지 클릭시 점 표시
                         cur_imgID = self.ImgIDList[self.ImgPointer]
                         cur_VB = self.VBLabelList[self.VBPointer]
 
@@ -1425,7 +1375,6 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
 
                         check = 0
 
-                        #팝업창 생성 추가------------------------------------
                         def dialog_open(self):
                             self.dialog = QDialog()
 
@@ -1435,7 +1384,6 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
                             self.dialog.setLayout(self.corDiaLayout)
 
 
-                            #버튼 생성
                             cancel_button = QPushButton("Cancel", self.dialog)
                             ok_button = QPushButton("OK", self.dialog)
                             save_button = QPushButton("SAVE", self.dialog)
@@ -1444,7 +1392,6 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
                             button_layout.addWidget(ok_button)
                             button_layout.addWidget(cancel_button)
                             
-                            #textbox에 픽셀 데이터 받아오기
                             self.textedit = QTextEdit()
                             self.corDiaLayout.addWidget(self.textedit)                          
 
@@ -1452,38 +1399,30 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
                             ok_button.clicked.connect(self.dialog_ok)
                             cancel_button.clicked.connect(self.dialog_close)
 
-                            #팝업창 생성
                             self.dialog.setWindowTitle('Annotation')
                             self.dialog.resize(500, 300)
                             self.dialog.show()
-                        #팝업창 생성 추가------------------------------------
 
                         self.x_list.append(self.co_y)   #픽셀 x 좌표 리스트
                         self.y_list.append(self.co_x)   #픽셀 y 좌표 리스트
                         
 
                         if (len(self.x_list) > 3) and (len(self.y_list) > 3):
-                            #첫번째 점
                             x1 = self.x_list[0]
                             y1 = self.y_list[0]
 
-                            #두번째 점
                             x2 = self.x_list[1]
                             y2 = self.y_list[1]
 
-                            #세번째 점
                             x3 = self.x_list[-2]
                             y3 = self.y_list[-2]
 
-                            #네번째 점
                             x4 = self.x_list[-1]
                             y4 = self.y_list[-1]
 
-                            #두 직선의 교점
                             self.cross_x = ((x1*y2 - y1*x2)*(x3-x4) - (x1-x2)*(x3*y4-y3*x4)) / ((x1-x2)*(y3-y4) - (y1-y2)*(x3-x4))
                             self.cross_y = ((x1*y2 - y1*x2)*(y3-y4) - (y1-y2)*(x3*y4-y3*x4)) / ((x1-x2)*(y3-y4) - (y1-y2)*(x3-x4))
 
-                            #첫번째, 두번째 점 대소비교
                             if x1 < x2:
                                 min_first_x = x1
                                 max_first_x = x2
@@ -1498,7 +1437,6 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
                                 min_first_y = y2
                                 max_first_y = y1
 
-                            #세번째, 네번째 점 대소비교
                             if x3 < x4:
                                 min_last_x = x3
                                 max_last_x = x4
@@ -1513,7 +1451,6 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
                                 min_last_y = y4
                                 max_last_y = y3
 
-                            #두 직선의 교점이 범위 안에 있는지 판별
                             dis_x = (self.cross_x > min_first_x) and (self.cross_x < max_first_x) and (self.cross_x > min_last_x) and (self.cross_x < max_last_x)
                             dis_y = (self.cross_y > min_first_y) and (self.cross_y < max_first_y) and (self.cross_y > min_last_y) and (self.cross_y < max_last_y)
 
@@ -1528,7 +1465,6 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
                                 self.y_list.append(int(self.cross_y))
                                 self.y_list.insert(0, int(self.cross_y))
 
-                                #x,y 최대,최소 값
                                 self.only_x_list = []
                                 self.only_y_list = []
                                 for k in range(0, len(self.x_list)):
@@ -1546,13 +1482,8 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
 
                                 check = 1
 
-                        print('--------픽셀 좌표 리스트 test--------------')
-                        print('x 좌표 리스트: ', self.x_list)
-                        print('y 좌표 리스트: ', self.y_list)
-
                         if check == 1:       
                             dialog_open(self)
-                    #------------------추가-----------------------
 
 
                         # # sanity check
@@ -1601,15 +1532,11 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
                     self.press = event.xdata, event.ydata
 
 
-    #------------팝업창 닫기 이벤트 추가----------
     def dialog_close(self):
         self.x_list = []
         self.y_list = []
         self.dialog.close()
-    #------------팝업창 닫기 이벤트 추가----------
-
-    
-    #------------팝업창 SAVE 버튼 기능 추가--------------
+ 
     def dialog_save(self):
         self.ds.PixelData = self.ds_pixarr.tobytes()
         
@@ -1621,11 +1548,7 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
         self.x_list = []
         self.y_list = []
         self.dialog.close()
-    #------------팝업창 SAVE 버튼 기능 추가--------------
-    
 
-
-    #------------팝업창 OK 버튼 저장 기능 추가--------------
     def dialog_ok(self):
         self.pix_data = self.textedit.toPlainText() #textbox값 읽어옴
         
@@ -1645,11 +1568,7 @@ class SpineLabelingApp(AppLayouts, InfoStorageDicts, QDialog):
 
         self.x_list = []
         self.y_list = []
-    #------------팝업창 OK 버튼 저장 기능 추가--------------
-
-
-
-                    
+        
     def on_motion(self, event):
         # Mouse motion after mouse right single click
         if event.xdata == None or event.ydata == None:
