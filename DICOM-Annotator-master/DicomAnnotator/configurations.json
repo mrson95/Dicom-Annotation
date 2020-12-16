@@ -1,0 +1,15 @@
+{
+	"input_directory": "images/",
+	"zooming_speed": 1.2,
+	"window_level_sensitivity": 1,
+	"path_for_result_file": "results.csv",
+	"list_region_identifiers": ["L5", "L4", "L3", "L2", "L1"],
+	"image_label_description": "atrophy grade",
+	"image_label": ["0", "1", "2", "3", "4"],
+	"region_labels":
+	{
+		"checkbox": "Artificial structure overlying",
+		"radiobuttons": [["ADD", "AMCI", "NC"]]
+	},
+	"number_bounding_polygon_vertices": 6
+}
