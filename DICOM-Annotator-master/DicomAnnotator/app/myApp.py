@@ -10,7 +10,6 @@ import time
 import math
 from os.path import join
 import os
-
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
 from PyQt5 import *
@@ -28,7 +27,6 @@ import pydicom
 from pydicom.data import get_testdata_file
 import numpy as np
 from matplotlib.pyplot import grid
-
 
 
 tt = toolTips()
